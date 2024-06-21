@@ -1,0 +1,17 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "sphinx_toml"
+authors = [{name = "Matthias Bussonnier", email = "bussonniermatthias@gmail.com"}]
+license = {file = "LICENSE"}
+classifiers = ["License :: OSI Approved :: MIT License"]
+dynamic = ["version", "description"]
+dependencies = [
+    "tomli ; python_version<'3.11'",
+]
+
+
+[project.urls]
+Home = "https://github.com/Carreau/sphinx_toml"
