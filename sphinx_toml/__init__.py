@@ -10,6 +10,7 @@ __version__ = "0.0.1"
 
 import sys
 from intersphinx_registry import get_intersphinx_mapping
+from .models import Config
 
 from typing import Any, List
 
@@ -20,6 +21,8 @@ else:
 
 with open("./sphinx.toml", "rb") as f:
     config = tomllib.load(f)
+    c = Config(**config)
+    print(c)
 
 
 class Normaliser:

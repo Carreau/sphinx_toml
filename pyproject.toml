@@ -10,8 +10,9 @@ classifiers = ["License :: OSI Approved :: MIT License"]
 dynamic = ["version", "description"]
 dependencies = [
     "tomli ; python_version<'3.11'",
+    "intersphinx_registry",
+    "pydantic",
 ]
-
 
 [project.urls]
 Home = "https://github.com/Carreau/sphinx_toml"
