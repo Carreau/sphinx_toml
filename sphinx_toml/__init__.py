@@ -6,7 +6,7 @@ currently extends to a few more keys until those are standardized and moved into
 a proper sphinx declarative configuration or into pyproject.toml.
 """
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 import sys
 from intersphinx_registry import get_intersphinx_mapping
