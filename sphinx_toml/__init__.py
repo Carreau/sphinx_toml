@@ -21,8 +21,8 @@ else:
 
 with open("./sphinx.toml", "rb") as f:
     config = tomllib.load(f)
+    # basic validation for now. What does not match
     c = Config(**config)
-    print(c)
 
 
 class Normaliser:
