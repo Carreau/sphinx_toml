@@ -6,7 +6,7 @@ currently extends to a few more keys until those are standardized and moved into
 a proper sphinx declarative configuration or into pyproject.toml.
 """
 
-__version__ = "0.0.3"
+__version__ = "0.0.4"
 
 import sys
 from intersphinx_registry import get_intersphinx_mapping
@@ -18,12 +18,6 @@ if sys.version_info > (3, 11):
     import tomllib
 else:
     import tomli as tomllib
-
-with open("./sphinx.toml", "rb") as f:
-    config = tomllib.load(f)
-    # basic validation for now. What does not match
-    c = Config(**config)
-
 
 class Normaliser:
     key: str
