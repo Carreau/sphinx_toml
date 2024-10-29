@@ -1,13 +1,13 @@
 from typing import List
 
 from pydantic import BaseModel, Field, Extra
-from typing import List, Dict, Tuple, Optional
+from typing import List, Dict, Tuple, Optional, Any
 
 
 class Sphinx(BaseModel):
     autodoc_type_aliases: Optional[Dict[str, str]] = None
     copyright: str
-    default_role: str
+    default_role: Optional[str] = None
     exclude_patterns: List[str]
     extensions: List[str]
     github_project_url: str
@@ -18,6 +18,7 @@ class Sphinx(BaseModel):
     source_suffix: str
     templates_path: Optional[List[str]] = None
     today_fmt: Optional[str] = None
+    todo_include_todos: Optional[bool] = None  # sphinx.ext.todo  ?
 
     # class Config:
     #    extra = Extra.forbid
@@ -44,11 +45,12 @@ class Latex(BaseModel):
 
 class Html(BaseModel):
     html_theme: str
-    html_static_path: List[str]
-    html_favicon: str
-    html_last_updated_fmt: str
+    html_static_path: Optional[List[str]] = None
+    html_favicon: Optional[str] = None
+    html_last_updated_fmt: Optional[str] = None
     htmlhelp_basename: str
-    html_additional_pages: List[Tuple[str, str]]
+    html_additional_pages: Optional[List[Tuple[str, str]]] = None
+    html_theme_options: Optional[Dict[str, Any]] = None
 
     class Config:
         extra = Extra.forbid
@@ -70,11 +72,11 @@ class InnerModel(BaseModel):
 
 class Config(BaseModel):
     sphinx: Sphinx
-    latex: Latex
+    latex: Optional[Latex] = None
     intersphinx_registry: Optional[IntersphinxRegistry] = None
-    html: Html
-    numpydoc: Numpydoc
-    intersphinx_mapping: Dict[str, InnerModel]
+    html: Optional[Html] = None
+    numpydoc: Optional[Numpydoc] = None
+    intersphinx_mapping: Optional[Dict[str, InnerModel]] = None
 
     class Config:
         extra = Extra.forbid
