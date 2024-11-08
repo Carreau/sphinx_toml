@@ -11,6 +11,7 @@ __version__ = "0.0.4"
 import sys
 from intersphinx_registry import get_intersphinx_mapping
 from .models import Config
+from pathlib import Path
 
 from typing import Any, List
 
@@ -65,9 +66,8 @@ class Loader:
     def __init__(self, normalisers):
         self.normalisers = normalisers
 
-    def load_into_locals(self, loc):
-        with open("./sphinx.toml", "rb") as f:
-            config = tomllib.load(f)
+    def _load_into_locals(self, data: str, loc):
+        config = tomllib.loads(data)
         sections = set(config.keys())
 
         for norm in self.normalisers:
@@ -78,6 +78,11 @@ class Loader:
 
         for s in sections:
             loc.update(config[s])
+
+
+    def load_into_locals(self, loc):
+        with open("./sphinx.toml", "rb") as f:
+            return self._load_into_locals(Path("./sphinx.toml").read_text(), loc)
 
 
 loader = Loader([IntersphinxMappingNormaliser(), IntersphinxRegistry(), HTML()])

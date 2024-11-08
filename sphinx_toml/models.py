@@ -1,6 +1,6 @@
 from typing import List
 
-from pydantic import BaseModel, Field, Extra
+from pydantic import BaseModel, Field
 from typing import List, Dict, Tuple, Optional, Any
 
 
@@ -20,15 +20,15 @@ class Sphinx(BaseModel):
     today_fmt: Optional[str] = None
     todo_include_todos: Optional[bool] = None  # sphinx.ext.todo  ?
 
-    # class Config:
-    #    extra = Extra.forbid
+    # class ConfigDict:
+    #    extra = 'forbid'
 
 
 class IntersphinxRegistry(BaseModel):
     packages: List[str]
 
-    class Config:
-        extra = Extra.forbid
+    class ConfigDict:
+        extra = "forbid"
 
 
 class Latex(BaseModel):
@@ -39,8 +39,8 @@ class Latex(BaseModel):
     ] = None
     latex_font_size: Optional[str] = None
 
-    class Config:
-        extra = Extra.forbid
+    class ConfigDict:
+        extra = "forbid"
 
 
 class Html(BaseModel):
@@ -52,8 +52,8 @@ class Html(BaseModel):
     html_additional_pages: Optional[List[Tuple[str, str]]] = None
     html_theme_options: Optional[Dict[str, Any]] = None
 
-    class Config:
-        extra = Extra.forbid
+    class ConfigDict:
+        extra = "forbid"
 
 
 class Numpydoc(BaseModel):
@@ -61,8 +61,8 @@ class Numpydoc(BaseModel):
     numpydoc_class_members_toctree: bool
     warning_is_error: bool
 
-    class Config:
-        extra = Extra.forbid
+    class ConfigDict:
+        extra = "forbid"
 
 
 class InnerModel(BaseModel):
@@ -78,5 +78,5 @@ class Config(BaseModel):
     numpydoc: Optional[Numpydoc] = None
     intersphinx_mapping: Optional[Dict[str, InnerModel]] = None
 
-    class Config:
-        extra = Extra.forbid
+    class ConfigDict:
+        extra = "forbid"
