@@ -1,11 +1,17 @@
+from __future__ import annotations
 from typing import List
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, Extra
 from typing import List, Dict, Tuple, Optional, Any
 
+class Autodoc(BaseModel):
+    autodoc_type_aliases: Optional[Dict[str, str]] = None
+
+
+class Ext(BaseModel):
+    autodoc: Autodoc
 
 class Sphinx(BaseModel):
-    autodoc_type_aliases: Optional[Dict[str, str]] = None
     copyright: str
     default_role: Optional[str] = None
     exclude_patterns: List[str]
@@ -19,9 +25,10 @@ class Sphinx(BaseModel):
     templates_path: Optional[List[str]] = None
     today_fmt: Optional[str] = None
     todo_include_todos: Optional[bool] = None  # sphinx.ext.todo  ?
+    ext: Ext
 
-    # class ConfigDict:
-    #    extra = 'forbid'
+    class Config:
+        extra = Extra.forbid
 
 
 class IntersphinxRegistry(BaseModel):

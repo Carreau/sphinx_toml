@@ -1,3 +1,6 @@
+[sphinx.ext.autodoc]
+autodoc_type_aliases = {a = 'b'}
+
 [sphinx]
 templates_path = ["_templates"]
 master_doc = "index"

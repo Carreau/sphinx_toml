@@ -10,8 +10,13 @@ __version__ = "0.0.4"
 
 import sys
 from intersphinx_registry import get_intersphinx_mapping
-from .models import Config
+from .models import Config, BaseModel
 from pathlib import Path
+
+from logging import getLogger
+
+log = getLogger(__name__)
+log.error("INFO")
 
 from typing import Any, List
 
@@ -66,18 +71,29 @@ class Loader:
     def __init__(self, normalisers):
         self.normalisers = normalisers
 
+    def _set_flatten_config(self, config, loc):
+        for k, v in config.items():
+            print("key >>", k, type(v))
+            if isinstance(v, BaseModel):
+                print("RECURSE")
+                self._set_flatten_config(v, loc)
+            else:
+                print("Update to", v)
+                loc[k] = v
+
     def _load_into_locals(self, data: str, loc):
         config = tomllib.loads(data)
+
+        pydantic_config = Config(**config)
+
         sections = set(config.keys())
 
-        for norm in self.normalisers:
-            if norm.key in config:
-                normalized = norm.normalise(config[norm.key], current_conf=loc)
-                loc.update(normalized)
-                sections.remove(norm.key)
-
-        for s in sections:
-            loc.update(config[s])
+        # for norm in self.normalisers:
+        #    if norm.key in config:
+        #        normalized = norm.normalise(config[norm.key], current_conf=loc)
+        #        loc.update(normalized)
+        #        sections.remove(norm.key)
+        self._set_flatten_config(config, loc)
 
 
     def load_into_locals(self, loc):
