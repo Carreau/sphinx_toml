@@ -1,12 +1,14 @@
 [sphinx.ext.autodoc]
 autodoc_type_aliases = {a = 'b'}
 
+[misc]
+github_project_url = "https://github.com/ipython/ipython"
+
 [sphinx]
 templates_path = ["_templates"]
 master_doc = "index"
 project = "IPython"
 copyright = "The IPython Development Team"
-github_project_url = "https://github.com/ipython/ipython"
 source_suffix = ".rst"
 exclude_patterns = ["**.ipynb_checkpoints"]
 pygments_style = "sphinx"
@@ -28,7 +30,7 @@ extensions = [
 default_role = "literal"
 modindex_common_prefix = ["IPython."]
 
-[intersphinx_mapping]
+[sphinx.ext.intersphinx.intersphinx_mapping]
 python = { url = 'https://docs.python.org/3', fallback = '' }
 rpy2 = { url = 'https://rpy2.github.io/doc/latest/html', fallback = '' }
 jupyterclient = { url = 'https://jupyter-client.readthedocs.io/en/latest', fallback = '' }
@@ -41,7 +43,7 @@ ipywidgets = { url = 'https://ipywidgets.readthedocs.io/en/stable', fallback = '
 ipyparallel = { url = 'https://ipyparallel.readthedocs.io/en/stable', fallback = '' }
 pip = { url = 'https://pip.pypa.io/en/stable', fallback = '' }
 
-[html]
+[sphinx.html]
 html_theme = "sphinx_rtd_theme"
 html_static_path = ["_static"]
 html_favicon = "_static/favicon.ico"

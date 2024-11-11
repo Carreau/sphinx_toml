@@ -71,15 +71,6 @@ class Loader:
     def __init__(self, normalisers):
         self.normalisers = normalisers
 
-    def _set_flatten_config(self, config, klass):
-        for key, value in config.items():
-            field = klass.model_fields[key]
-            field_a = field.annotation
-            if isinstance(field_a, type) and issubclass(field_a, BaseModel):
-                yield from self._set_flatten_config(value, field_a)
-            else:
-                yield key, value
-
     def _load_into_locals(self, data: str, loc):
         config = tomllib.loads(data)
 
@@ -92,8 +83,7 @@ class Loader:
         #        normalized = norm.normalise(config[norm.key], current_conf=loc)
         #        loc.update(normalized)
         #        sections.remove(norm.key)
-        for k, v in self._set_flatten_config(config, Config):
-            print(k, "to", v)
+        for k, v in Config._flatten(config):
             loc[k] = v
 
 
