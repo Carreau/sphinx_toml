@@ -4,6 +4,7 @@ from typing import List
 from pydantic import BaseModel, Field, Extra
 from typing import List, Dict, Tuple, Optional, Any
 
+
 class Autodoc(BaseModel):
     autodoc_type_aliases: Optional[Dict[str, str]] = None
 
