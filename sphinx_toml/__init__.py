@@ -11,6 +11,7 @@ __version__ = "0.0.4"
 import sys
 from intersphinx_registry import get_intersphinx_mapping
 from .models import Config
+import warnings
 
 from typing import Any, List
 
@@ -34,6 +35,20 @@ class IntersphinxMappingNormaliser:
         for k, v in data.items():
             fallback = data[k]["fallback"]
             mapping[k] = tuple([data[k]["url"], None if fallback == "" else fallback])
+        return mapping
+
+
+class SphinxNormalizer:
+    key = "sphinx"
+
+    def normalise(self, data=None, *, current_conf=None):
+        assert isinstance(data, dict)
+        mapping = {k: v for k, v in data.items()}
+        if "source_suffix" in mapping:
+            suffix = mapping["source_suffix"]
+            if isinstance(mapping["source_suffix"], str):
+                warnings.warn("Prefer {key:value} for source_suffix")
+                mapping["source_suffix"] = {suffix: "restructuredtext"}
         return mapping
 
 
@@ -80,6 +95,8 @@ class Loader:
             loc.update(config[s])
 
 
-loader = Loader([IntersphinxMappingNormaliser(), IntersphinxRegistry(), HTML()])
+loader = Loader(
+    [IntersphinxMappingNormaliser(), IntersphinxRegistry(), HTML(), SphinxNormalizer()]
+)
 
 load_into_locals = loader.load_into_locals

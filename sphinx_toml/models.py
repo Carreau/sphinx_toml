@@ -15,7 +15,7 @@ class Sphinx(BaseModel):
     modindex_common_prefix: List[str] = None
     pygments_style: str
     project: str
-    source_suffix: str
+    source_suffix: str | list[str] | dict[str, str]
     templates_path: Optional[List[str]] = None
     today_fmt: Optional[str] = None
     todo_include_todos: Optional[bool] = None  # sphinx.ext.todo  ?
