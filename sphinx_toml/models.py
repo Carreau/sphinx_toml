@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import List
 
 from pydantic import BaseModel, Field, Extra
@@ -19,9 +20,20 @@ class Sphinx(BaseModel):
     templates_path: Optional[List[str]] = None
     today_fmt: Optional[str] = None
     todo_include_todos: Optional[bool] = None  # sphinx.ext.todo  ?
+    ext: Optional[SphinxExt] = None
+    today_fmt: Optinal[str] = None
+    rst_prolog = Optional[str] = None
 
     # class Config:
     #    extra = Extra.forbid
+
+
+class SphinxExt(BaseModel):
+    autodoc: Optional[SphinxExtAutodoc] = None
+
+
+class SphinxExtAutodoc(BaseModel):
+    autodoc_type_aliases: Dict[str, str]
 
 
 class IntersphinxRegistry(BaseModel):
@@ -29,6 +41,10 @@ class IntersphinxRegistry(BaseModel):
 
     class Config:
         extra = Extra.forbid
+
+
+class SphinxToml(BaseModel):
+    environ: Dict[str, str]
 
 
 class Latex(BaseModel):
@@ -77,6 +93,7 @@ class Config(BaseModel):
     html: Optional[Html] = None
     numpydoc: Optional[Numpydoc] = None
     intersphinx_mapping: Optional[Dict[str, InnerModel]] = None
+    sphinx_toml: Optional[SphinxToml] = None
 
     class Config:
         extra = Extra.forbid

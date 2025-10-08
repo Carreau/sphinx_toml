@@ -9,6 +9,7 @@ a proper sphinx declarative configuration or into pyproject.toml.
 __version__ = "0.0.4"
 
 import sys
+import os
 from intersphinx_registry import get_intersphinx_mapping
 from .models import Config
 import warnings
@@ -83,7 +84,13 @@ class Loader:
     def load_into_locals(self, loc):
         with open("./sphinx.toml", "rb") as f:
             config = tomllib.load(f)
+        sphinx_toml = config.pop("sphinx_toml", {})
+
         sections = set(config.keys())
+
+        for k, v in sphinx_toml.get("environ", dict()).items():
+            print("set environ", k, "to", v)
+            os.environ[k] = v
 
         for norm in self.normalisers:
             if norm.key in config:
