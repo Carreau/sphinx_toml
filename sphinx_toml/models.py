@@ -22,7 +22,7 @@ class Sphinx(BaseModel):
     todo_include_todos: Optional[bool] = None  # sphinx.ext.todo  ?
     ext: Optional[SphinxExt] = None
     today_fmt: Optinal[str] = None
-    rst_prolog = Optional[str] = None
+    rst_prolog: Optional[str] = None
 
     # class Config:
     #    extra = Extra.forbid

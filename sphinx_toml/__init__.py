@@ -50,6 +50,12 @@ class SphinxNormalizer:
             if isinstance(mapping["source_suffix"], str):
                 warnings.warn("Prefer {key:value} for source_suffix")
                 mapping["source_suffix"] = {suffix: "restructuredtext"}
+
+        if "ext" in mapping:
+            autodoc = mapping.get("ext", {}).pop("autodoc", {})
+            print("Autodoc", autodoc)
+            mapping.update(autodoc)
+
         return mapping
 
 
@@ -97,13 +103,21 @@ class Loader:
                 normalized = norm.normalise(config[norm.key], current_conf=loc)
                 loc.update(normalized)
                 sections.remove(norm.key)
+                print(norm.key, "->", loc)
+            else:
+                print(norm.key, "not in ", config.keys())
 
         for s in sections:
             loc.update(config[s])
 
 
 loader = Loader(
-    [IntersphinxMappingNormaliser(), IntersphinxRegistry(), HTML(), SphinxNormalizer()]
+    [
+        IntersphinxMappingNormaliser(),
+        IntersphinxRegistry(),
+        HTML(),
+        SphinxNormalizer(),
+    ]
 )
 
 load_into_locals = loader.load_into_locals
