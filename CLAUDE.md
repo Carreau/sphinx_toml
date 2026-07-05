@@ -35,7 +35,12 @@ README.md
 LICENSE          # MIT
 ```
 
-There is currently **no test suite, no CI, and no linter configuration**.
+There is currently **no unit-test suite and no linter configuration**. CI does
+exist: `.github/workflows/ipython-docs.yml` is an integration guard that builds
+[IPython](https://github.com/ipython/ipython)'s real documentation against the
+`sphinx_toml` in the checkout (IPython's `docs/source/conf.py` calls
+`load_into_locals`, and `sphinx_toml` is listed in its `docs/requirements.txt`),
+so a change here that breaks IPython's doc build fails CI.
 
 ## Architecture
 

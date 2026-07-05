@@ -74,8 +74,12 @@ normaliser via a minimal `sphinx.toml`. Test under 3.10 and 3.11 if possible.
     - a test that `load_into_locals({})` produces the expected dict.
     Use `pytest`; add a `[project.optional-dependencies] test = ["pytest"]`.
 
-9. **Add CI.** A GitHub Actions workflow running the test suite on Python
-    3.10 / 3.11 / 3.12.
+9. **CI.** Done for downstream integration:
+    `.github/workflows/ipython-docs.yml` builds IPython's real docs against this
+    checkout of `sphinx_toml` on Python 3.11 / 3.12 (IPython depends on it). Still
+    add a lightweight job that runs the unit-test suite (#8) on 3.10–3.12 once it
+    exists — the integration build is slow and heavy, so a fast unit-test job
+    should gate most changes.
 
 10. **Add linting/formatting.** `ruff` (lint + format) with a minimal config;
     it flags the unused imports and the missing `self`.
