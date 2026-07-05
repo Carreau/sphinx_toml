@@ -67,12 +67,6 @@ There is currently **no test suite, no CI, and no linter configuration**.
 
 Treat these as landmines, not settled design:
 
-- `models.py` has a typo `Optinal[str]` (line ~24). It does **not** fail on
-  bare import (`from __future__ import annotations` makes annotations lazy
-  strings), but it raises `PydanticUndefinedAnnotation: name 'Optinal' is not
-  defined` the moment the `Config` model is built/validated. Because the models
-  are currently unused (see below), this is silent today — it will bite the
-  instant validation is wired up. `today_fmt` is also declared twice.
 - `Config` / `Extra` use Pydantic **v1** idioms while `pydantic` (v2) is the
   declared and installed dependency; they still work via v2's deprecation shim
   but should be migrated.
