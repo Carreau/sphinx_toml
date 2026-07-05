@@ -1,0 +1,90 @@
+name: Build IPython docs
+
+# sphinx_toml is a build-time dependency of IPython's documentation
+# (IPython's docs/source/conf.py calls `load_into_locals(locals())`).
+# This workflow is an integration guard: it builds the real IPython docs
+# against the sphinx_toml in this checkout, so a change here that would
+# break IPython's doc build fails CI before it ships.
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+# Only keep the latest run per branch/PR.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ipython-docs:
+    name: IPython docs (py${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - name: Checkout sphinx_toml
+        uses: actions/checkout@v4
+        with:
+          path: sphinx_toml
+
+      - name: Checkout IPython (main)
+        uses: actions/checkout@v4
+        with:
+          repository: ipython/ipython
+          ref: main
+          path: ipython
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install system dependencies
+        # graphviz provides `dot`, required by sphinx.ext.graphviz — the same
+        # system package IPython installs on Read the Docs.
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y graphviz
+
+      - name: Install IPython documentation requirements
+        working-directory: ipython
+        # docs/requirements.txt installs IPython itself (`-e .[doc]`) plus the
+        # full doc toolchain, including a released sphinx_toml from PyPI which
+        # the next step overrides with this checkout.
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r docs/requirements.txt
+
+      - name: Install sphinx_toml from this checkout
+        # --force-reinstall + --no-deps so the build exercises the sphinx_toml
+        # in this repo, not the one pulled from PyPI above.
+        run: python -m pip install --force-reinstall --no-deps ./sphinx_toml
+
+      - name: Show which sphinx_toml is being used
+        run: |
+          python -c "import sphinx_toml; print('sphinx_toml', sphinx_toml.__version__, 'from', sphinx_toml.__file__)"
+
+      - name: Build IPython docs
+        # Replicate IPython's Read the Docs build: run from the source dir
+        # (so load_into_locals finds ./sphinx.toml, which lives next to conf.py)
+        # with READTHEDOCS=True (so conf.py runs its autogen scripts, as on RTD).
+        working-directory: ipython/docs/source
+        env:
+          READTHEDOCS: "True"
+        run: |
+          python -m sphinx -b html -d ../build/doctrees . ../build/html
+
+      - name: Upload built HTML
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ipython-html-py${{ matrix.python-version }}
+          path: ipython/docs/build/html
+          if-no-files-found: ignore
+          retention-days: 7

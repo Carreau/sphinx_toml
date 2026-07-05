@@ -21,7 +21,6 @@ class Sphinx(BaseModel):
     today_fmt: Optional[str] = None
     todo_include_todos: Optional[bool] = None  # sphinx.ext.todo  ?
     ext: Optional[SphinxExt] = None
-    today_fmt: Optinal[str] = None
     rst_prolog: Optional[str] = None
 
     # class Config:
