@@ -8,6 +8,7 @@ a proper sphinx declarative configuration or into pyproject.toml.
 
 __version__ = "0.0.4"
 
+import logging
 import sys
 import os
 from intersphinx_registry import get_intersphinx_mapping
@@ -15,6 +16,8 @@ from .models import Config
 import warnings
 
 from typing import Any, List
+
+logger = logging.getLogger(__name__)
 
 if sys.version_info >= (3, 11):
     import tomllib
@@ -53,7 +56,7 @@ class SphinxNormalizer:
 
         if "ext" in mapping:
             autodoc = mapping.get("ext", {}).pop("autodoc", {})
-            print("Autodoc", autodoc)
+            logger.debug("Autodoc: %s", autodoc)
             mapping.update(autodoc)
 
         return mapping
@@ -95,7 +98,7 @@ class Loader:
         sections = set(config.keys())
 
         for k, v in sphinx_toml.get("environ", dict()).items():
-            print("set environ", k, "to", v)
+            logger.debug("set environ %s to %s", k, v)
             os.environ[k] = v
 
         for norm in self.normalisers:
@@ -103,9 +106,9 @@ class Loader:
                 normalized = norm.normalise(config[norm.key], current_conf=loc)
                 loc.update(normalized)
                 sections.remove(norm.key)
-                print(norm.key, "->", loc)
+                logger.debug("%s -> %s", norm.key, loc)
             else:
-                print(norm.key, "not in ", config.keys())
+                logger.debug("%s not in %s", norm.key, config.keys())
 
         for s in sections:
             loc.update(config[s])
