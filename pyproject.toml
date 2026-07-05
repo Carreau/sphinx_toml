@@ -15,5 +15,12 @@ dependencies = [
 ]
 
 requires-python = ">=3.10"
+
+[project.optional-dependencies]
+test = ["pytest"]
+
 [project.urls]
 Home = "https://github.com/Carreau/sphinx_toml"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
