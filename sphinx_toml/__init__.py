@@ -24,7 +24,7 @@ else:
 class Normaliser:
     key: str
 
-    def normalise(data: Any) -> Any:
+    def normalise(self, data: Any, *, current_conf=None) -> Any:
         pass
 
 
@@ -62,7 +62,7 @@ class SphinxNormalizer:
 class IntersphinxRegistry:
     key = "intersphinx_registry"
 
-    def normalise(self, data, current_conf=None):
+    def normalise(self, data, *, current_conf=None):
         mapping = get_intersphinx_mapping(packages=data["packages"])
         if "intersphinx_mapping" in current_conf:
             mapping.update(current_conf["intersphinx_mapping"])
@@ -72,7 +72,7 @@ class IntersphinxRegistry:
 class HTML:
     key = "html"
 
-    def normalise(self, data, current_conf=None):
+    def normalise(self, data, *, current_conf=None):
         if "html_additional_pages" in data:
             data_toml = data["html_additional_pages"]
             data["html_additional_pages"] = {}
